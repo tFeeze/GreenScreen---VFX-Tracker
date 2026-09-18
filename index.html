@@ -328,6 +328,9 @@
     <button id="kbFakeBtn" class="kbtn">Replica Keyboard &mdash; no capsule</button>
     <button id="kbBtn" class="kbtn alt">System Keyboard</button>
 
+    <h2>Share</h2>
+    <button id="shareBtn" class="kbtn alt">Send to another device</button>
+
     <p class="hint">
       <b>Tap</b> the screen to open settings.<br>
       <b>3-finger tap</b> to lock / unlock the interface while filming.
@@ -873,6 +876,23 @@
     kbActive = true;
     closePanel();
     showFakeKB();
+  });
+
+  /* ---------- share to another device ---------- */
+  document.getElementById('shareBtn').addEventListener('click', function(){
+    var url = location.href;
+    var data = { title: 'Green Screen — VFX Trackers', text: 'Green Screen — VFX Trackers', url: url };
+    if (navigator.share){
+      navigator.share(data).catch(function(){});
+    } else if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){
+        toast('Link copied');
+      }).catch(function(){
+        toast(url, 4000);
+      });
+    } else {
+      toast(url, 4000);
+    }
   });
 
   /* ---------- keep screen awake ---------- */
